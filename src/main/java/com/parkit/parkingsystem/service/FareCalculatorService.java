@@ -14,7 +14,7 @@ public class FareCalculatorService {
         float outHour = (ticket.getOutTime().getHours() * 60) + (ticket.getOutTime().getMinutes());
 
         //TODO: change deprecated
-        float durationDay= ( (ticket.getOutTime().getTime()) - (ticket.getInTime().getDay()) )*24;
+        float durationDay= ( (ticket.getOutTime().getDay()) - (ticket.getInTime().getDay()) )*24;
         float duration = durationDay + (outHour - inHour)/60;
 
         switch (ticket.getParkingSpot().getParkingType()){
