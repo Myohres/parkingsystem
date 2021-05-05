@@ -13,7 +13,7 @@ public class FareCalculatorService {
         float inHour =  (ticket.getInTime().getHours() * 60) + (ticket.getInTime().getMinutes()) ;
         float outHour = (ticket.getOutTime().getHours() * 60) + (ticket.getOutTime().getMinutes());
 
-        //TODO: Some tests are failing here. Need to check if this logic is correct
+        //TODO: change deprecated
         float durationDay= ( (ticket.getOutTime().getTime()) - (ticket.getInTime().getDay()) )*24;
         float duration = durationDay + (outHour - inHour)/60;
 
