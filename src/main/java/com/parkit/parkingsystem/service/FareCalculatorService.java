@@ -22,42 +22,26 @@ public class FareCalculatorService {
         double inHour = ticket.getInTime().getTime();
         double outHour = ticket.getOutTime().getTime();
         double duration = (outHour - inHour) / 1000 / 60 / 60;
-
-        /*
-          (duration*taux) *reduction
-        */
-
+        double reduction = 1;
 
         if (duration < 0.5) {
-            ticket.setPrice(Fare.VEHICLE_RATE_FOR_LESS_HALF_HOUR);
-        } else if (ticketDAO.IsRecurrentUser(ticket.getVehicleRegNumber())) {
-            switch (ticket.getParkingSpot().getParkingType()) {
-                case CAR: {
-                    ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) * Fare.RECURRENT_USER_RATE);
-                    break;
-                }
-                case BIKE: {
-                    ticket.setPrice((duration * Fare.BIKE_RATE_PER_HOUR) * Fare.RECURRENT_USER_RATE);
-                    break;
-                }
-                default:
-                    throw new IllegalArgumentException("Unknown Parking Type");
+            reduction = Fare.VEHICLE_RATE_FOR_LESS_HALF_HOUR;
+        }
+        if (ticketDAO.IsRecurrentUser(ticket.getVehicleRegNumber())){
+            reduction = Fare.RECURRENT_USER_RATE;
+        }
+
+        switch (ticket.getParkingSpot().getParkingType()) {
+            case CAR: {
+                ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) * reduction );
+                break;
             }
-        } else {
-            switch (ticket.getParkingSpot().getParkingType()) {
-                case CAR: {
-                    ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
-                    break;
-                }
-                case BIKE: {
-                    ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
-                    break;
-                }
-                default:
-                    throw new IllegalArgumentException("Unknown Parking Type");
+            case BIKE: {
+                ticket.setPrice((duration * Fare.BIKE_RATE_PER_HOUR) * reduction );
+                break;
             }
+            default:
+                throw new IllegalArgumentException("Unknown Parking Type");
         }
     }
-
-
 }
