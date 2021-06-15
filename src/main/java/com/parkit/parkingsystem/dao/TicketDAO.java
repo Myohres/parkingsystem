@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class TicketDAO {
 
@@ -85,5 +87,35 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+
+    public Boolean IsRecurrentUser(String vehicleRegNumber) {
+        Connection con = null;
+        int i = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRENT_USER);
+            ResultSet rs;
+            rs = ps.executeQuery();
+            while (i<2) {
+                rs.next();
+                if (rs.getString(1).equals(vehicleRegNumber)) {
+                    i++;
+                }
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+            dataBaseConfig.closeConnection(con);
+
+        } catch (Exception ex) {
+            logger.error("Dont find VehicleRegNumber", ex);
+        }
+        if (i >=2) {
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }

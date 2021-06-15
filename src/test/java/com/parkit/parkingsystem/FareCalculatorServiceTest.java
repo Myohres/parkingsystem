@@ -1,31 +1,52 @@
 package com.parkit.parkingsystem;
 
+import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.ParkingSpotDAO;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Date;
 
+@ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
+    @Mock
+    private static TicketDAO ticketDAO;
+
+    @InjectMocks
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
 
     @BeforeAll
     private static void setUp() {
+
         fareCalculatorService = new FareCalculatorService();
+
     }
 
     @BeforeEach
     private void setUpPerTest() {
+
+
         ticket = new Ticket();
+        ticket.setVehicleRegNumber("ABCDEF");
+
     }
 
     @Test
@@ -124,4 +145,77 @@ public class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
+    @Test
+    public void calculateFareCarWithLessThanHalfHour(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 29 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setVehicleRegNumber("ABCDEF");
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( (Fare.VEHICLE_RATE_FOR_LESS_HALF_HOUR) , ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareBikeWithLessThanHalfHour(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 29 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.BIKE,false);
+
+        ticket.setVehicleRegNumber("ABCDEF");
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( (Fare.VEHICLE_RATE_FOR_LESS_HALF_HOUR) , ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareCarAlreadyComingBefore(){
+        // ABCDEF est venu plusieurs fois
+       when(ticketDAO.IsRecurrentUser("ABCDEF")).thenReturn(true);
+
+
+
+        // 2e passage en cour de ABCDEF ticket
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 60 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setVehicleRegNumber("ABCDEF");
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+
+
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( (Fare.CAR_RATE_PER_HOUR * Fare.RECURRENT_USER_RATE), ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareBikeAlreadyComingBefore(){
+        // ABCDEF est venu plusieurs fois
+        when(ticketDAO.IsRecurrentUser("ABCDEF")).thenReturn(true);
+
+        // 2e passage en cour de ABCDEF ticket
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 60 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.BIKE,false);
+
+        ticket.setVehicleRegNumber("ABCDEF");
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+
+
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( (Fare.BIKE_RATE_PER_HOUR * Fare.RECURRENT_USER_RATE), ticket.getPrice());
+    }
 }
