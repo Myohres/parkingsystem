@@ -5,9 +5,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class App {
-    private static final Logger logger = LogManager.getLogger("App");
-    public static void main(String args[]){
-        logger.info("Initializing Parking System");
+    private void constructor() { }
+
+    /**
+     * Initialize logger "App".
+     */
+    private static final Logger LOGGER = LogManager.getLogger("App");
+
+    /**
+     * Run Parking System App.
+     * @param args
+     */
+    public static void main(final String[] args) {
+        LOGGER.info("Initializing Parking System");
         InteractiveShell.loadInterface();
     }
 }
