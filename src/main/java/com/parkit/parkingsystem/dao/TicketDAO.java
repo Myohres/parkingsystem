@@ -90,8 +90,8 @@ public class TicketDAO {
     }
 
 
-    public Boolean IsRecurrentUser(String vehicleRegNumber) {
-        Connection con = null;
+    public Boolean isRecurrentUser(String vehicleRegNumber) {
+        Connection con ;
         int i = 0;
         try {
             con = dataBaseConfig.getConnection();
@@ -111,11 +111,7 @@ public class TicketDAO {
         } catch (Exception ex) {
             logger.error("Dont find VehicleRegNumber", ex);
         }
-        if (i >=2) {
-            return true;
-        }else {
-            return false;
-        }
+        return i >= 2;
 
     }
 }

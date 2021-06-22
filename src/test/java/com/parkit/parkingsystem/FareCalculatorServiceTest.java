@@ -1,12 +1,8 @@
 package com.parkit.parkingsystem;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
-import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
@@ -178,7 +174,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarAlreadyComingBefore(){
         // ABCDEF est venu plusieurs fois
-       when(ticketDAO.IsRecurrentUser("ABCDEF")).thenReturn(true);
+       when(ticketDAO.isRecurrentUser("ABCDEF")).thenReturn(true);
 
 
 
@@ -201,7 +197,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareBikeAlreadyComingBefore(){
         // ABCDEF est venu plusieurs fois
-        when(ticketDAO.IsRecurrentUser("ABCDEF")).thenReturn(true);
+        when(ticketDAO.isRecurrentUser("ABCDEF")).thenReturn(true);
 
         // 2e passage en cour de ABCDEF ticket
         Date inTime = new Date();
