@@ -20,6 +20,9 @@ public class DataBaseConfig {
      * Log parameter.
      */
     private static final Logger LOGGER = LogManager.getLogger("DataBaseConfig");
+    /**
+     * Path name for config.properties file.
+     */
     private static final String DB_LOG_CONNEXION = "config.properties";
 
     /**
@@ -52,7 +55,11 @@ public class DataBaseConfig {
         } catch (IOException e) {
             System.err.println("Error load Properties from" + DB_LOG_CONNEXION);
         } finally {
-            try { if (fis != null) { fis.close(); } } catch (IOException e) { }
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException ignored) { }
         }
         return con;
     }
