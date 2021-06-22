@@ -21,7 +21,7 @@ public class ParkingService {
     /**
      * Create a new FareCalculatorService.
      */
-    private static final FareCalculatorService fareCalculatorService =
+    private static final FareCalculatorService FARE_CALCULATOR_SERVICE =
             new FareCalculatorService();
 
     /**
@@ -142,7 +142,7 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
+            FARE_CALCULATOR_SERVICE.calculateFare(ticket);
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
