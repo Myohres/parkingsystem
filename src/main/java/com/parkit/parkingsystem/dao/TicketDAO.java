@@ -34,7 +34,8 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
-            return ps.execute();
+            ps.execute();
+            return true;
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
@@ -46,13 +47,15 @@ public class TicketDAO {
 
     public Ticket getTicket(String vehicleRegNumber) {
         Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         Ticket ticket = null;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
+            ps = con.prepareStatement(DBConstants.GET_TICKET);
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if(rs.next()){
                 ticket = new Ticket();
                 ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
@@ -63,11 +66,12 @@ public class TicketDAO {
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
             }
-            dataBaseConfig.closeResultSet(rs);
-            dataBaseConfig.closePreparedStatement(ps);
+
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
             return ticket;
         }
@@ -95,27 +99,28 @@ public class TicketDAO {
 
 
     public Boolean isRecurrentUser(String vehicleRegNumber) {
-        Connection con ;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int visitNumberToBeRecUser = 2;
         int i = 0;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRENT_USER);
-            ResultSet rs;
+            ps = con.prepareStatement(DBConstants.IS_RECURRENT_USER);
             rs = ps.executeQuery();
-            while (i<2) {
+            while (i<visitNumberToBeRecUser) {
                 rs.next();
                 if (rs.getString(1).equals(vehicleRegNumber)) {
                     i++;
                 }
             }
+        } catch (Exception ex) {
+            logger.error("Dont find VehicleRegNumber", ex);
+        }finally {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
-
-        } catch (Exception ex) {
-            logger.error("Dont find VehicleRegNumber", ex);
         }
         return i >= 2;
-
     }
 }
