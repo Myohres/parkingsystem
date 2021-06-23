@@ -20,11 +20,11 @@ public class ParkingSpotDAO {
     /**
      * Create new DataBaseConfig.
      */
-    public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    private DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     /**
      * set DataBaseConfig.
-     * @param newDataBaseConfig
+     * @param newDataBaseConfig DataBaseConfig
      */
     public void setDataBaseConfig(final DataBaseConfig newDataBaseConfig) {
         dataBaseConfig =  newDataBaseConfig;

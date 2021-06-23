@@ -23,7 +23,15 @@ public class TicketDAO {
     /**
      * Initialise DatabaseConfig.
      */
-    public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    private DataBaseConfig dataBaseConfig = new DataBaseConfig();
+
+    /**
+     * Set dataBaseConfig.
+     * @param newDatabaseConfig DataBaseConfig
+     */
+    public void setDataBaseConfig(final DataBaseConfig newDatabaseConfig) {
+        dataBaseConfig = newDatabaseConfig;
+    }
 
     /**
      * Save ticket in DB.
@@ -100,8 +108,8 @@ public class TicketDAO {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     /**
