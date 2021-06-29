@@ -18,16 +18,16 @@ public class ParkingSpot {
 
     /**
      * ParkingSpot constructor.
-     * @param numberInput int
-     * @param parkingTypeInput ParkingType
-     * @param isAvailableInput boolean
+     * @param newNumber int
+     * @param newParkingType ParkingType
+     * @param newIsAvailable boolean
      */
-    public ParkingSpot(final int numberInput,
-                       final ParkingType parkingTypeInput,
-                       final boolean isAvailableInput) {
-        this.number = numberInput;
-        this.parkingType = parkingTypeInput;
-        this.isAvailable = isAvailableInput;
+    public ParkingSpot(final int newNumber,
+                       final ParkingType newParkingType,
+                       final boolean newIsAvailable) {
+        this.number = newNumber;
+        this.parkingType = newParkingType;
+        this.isAvailable = newIsAvailable;
     }
 
     /**

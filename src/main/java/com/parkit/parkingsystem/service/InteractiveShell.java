@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
-    private void constructor() { }
+    private void interactiveShell() { }
 
     /**
      * initialise Logger "InteractiveShell".

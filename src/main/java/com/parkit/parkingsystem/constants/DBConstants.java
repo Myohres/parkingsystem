@@ -5,7 +5,7 @@ public class DBConstants {
     /**
      * default constructor.
      */
-    public void constructor() { }
+    public void dBConstants() { }
 
     /**
      * SQL command getting Next available parking Spot.

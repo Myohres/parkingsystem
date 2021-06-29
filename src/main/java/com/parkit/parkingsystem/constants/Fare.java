@@ -4,7 +4,7 @@ public class Fare {
     /**
      * default constructor.
      */
-    public void constructor() { }
+    public void fare() { }
     /**
      * Constant Rate for bike per hour.
      */
