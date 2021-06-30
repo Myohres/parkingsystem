@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FareCalculatorService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.service</a> &gt; <span class="el_source">FareCalculatorService.java</span></div><h1>FareCalculatorService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.service;
+
+
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.model.Ticket;
+
+/** FareCalculatorService.
+ *  Calculate Ticket Price
+ */
+
+public class FareCalculatorService {
+    /**
+     * Create a TicketDAO.
+     */
+    private TicketDAO ticketDAO;
+
+    /**
+     * Initialise a TicketDAO.
+     */
+<span class="fc" id="L21">    public FareCalculatorService() {</span>
+<span class="fc" id="L22">        ticketDAO = new TicketDAO();</span>
+<span class="fc" id="L23">    }</span>
+
+    /** calculateFare.
+     * check duration vehicle in ParkingSpot
+     * check vehicle is coming before (Recurrent User)
+     * check vehicle type
+     * calculate ticketPrice with duration, Rate and reduction
+     * send TicketPrice to ticket
+     *
+     * @param ticket Vehicle Ticket
+     */
+    public void calculateFare(final Ticket ticket) {
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if ((ticket.getOutTime() == null)</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">                || (ticket.getOutTime().before(ticket.getInTime()))) {</span>
+<span class="fc" id="L37">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L38">                    &quot;Out time provided is incorrect:&quot; + ticket.getOutTime());</span>
+        }
+<span class="fc" id="L40">        final int convertTime = 1000 * 60 * 60;</span>
+<span class="fc" id="L41">        double inHour = ticket.getInTime().getTime();</span>
+<span class="fc" id="L42">        double outHour = ticket.getOutTime().getTime();</span>
+<span class="fc" id="L43">        double duration = (outHour - inHour) / convertTime;</span>
+<span class="fc" id="L44">        double reduction = 1;</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (duration &lt; Fare.FREE_DURATION) {</span>
+<span class="fc" id="L47">            reduction = Fare.VEHICLE_RATE_FOR_LESS_HALF_HOUR;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        } else if (ticketDAO.isRecurrentUser(ticket.getVehicleRegNumber())) {</span>
+<span class="fc" id="L49">            reduction = Fare.RECURRENT_USER_RATE;</span>
+        }
+
+<span class="pc bpc" id="L52" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()) {</span>
+            case CAR:
+<span class="fc" id="L54">                ticket.setPrice(</span>
+                        (duration * Fare.CAR_RATE_PER_HOUR) * reduction);
+<span class="fc" id="L56">                break;</span>
+            case BIKE:
+<span class="fc" id="L58">                ticket.setPrice(</span>
+                        (duration * Fare.BIKE_RATE_PER_HOUR) * reduction);
+<span class="fc" id="L60">                break;</span>
+            default:
+<span class="nc" id="L62">                throw new IllegalArgumentException(&quot;Unknown Parking Type&quot;);</span>
+        }
+<span class="fc" id="L64">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
