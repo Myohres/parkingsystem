@@ -41,16 +41,16 @@ public class ParkingService {
 
     /**
      * Constructor ParkingService.
-     * @param inputReaderUtilInput InputReaderUtil
-     * @param parkingSpotDAOInput ParkingSpotDAO
-     * @param ticketDAOInput TicketDAO
+     * @param newInputReaderUtil InputReaderUtil
+     * @param newParkingSpotDAO ParkingSpotDAO
+     * @param newTicketDAO TicketDAO
      */
-    public ParkingService(final InputReaderUtil inputReaderUtilInput,
-                          final ParkingSpotDAO parkingSpotDAOInput,
-<span class="fc" id="L50">                          final TicketDAO ticketDAOInput) {</span>
-<span class="fc" id="L51">        this.inputReaderUtil = inputReaderUtilInput;</span>
-<span class="fc" id="L52">        this.parkingSpotDAO = parkingSpotDAOInput;</span>
-<span class="fc" id="L53">        this.ticketDAO = ticketDAOInput;</span>
+    public ParkingService(final InputReaderUtil newInputReaderUtil,
+                          final ParkingSpotDAO newParkingSpotDAO,
+<span class="fc" id="L50">                          final TicketDAO newTicketDAO) {</span>
+<span class="fc" id="L51">        this.inputReaderUtil = newInputReaderUtil;</span>
+<span class="fc" id="L52">        this.parkingSpotDAO = newParkingSpotDAO;</span>
+<span class="fc" id="L53">        this.ticketDAO = newTicketDAO;</span>
 <span class="fc" id="L54">    }</span>
 
     /**

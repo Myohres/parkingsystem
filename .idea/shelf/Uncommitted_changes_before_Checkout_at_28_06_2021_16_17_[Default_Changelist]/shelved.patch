@@ -1,0 +1,19 @@
+Index: src/main/java/com/parkit/parkingsystem/constants/DBConstants.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.parkit.parkingsystem.constants;\r\n\r\npublic class DBConstants {\r\n\r\n    /**\r\n     * default constructor.\r\n     */\r\n    public void constructor() { }\r\n\r\n    /**\r\n     * SQL command getting Next available parking Spot.\r\n     */\r\n    public static final String GET_NEXT_PARKING_SPOT =\r\n            \"select min(PARKING_NUMBER) \"\r\n                    + \"from parking where AVAILABLE = true and TYPE = ?\";\r\n    /**\r\n     * SQL command update availability parking spot.\r\n     */\r\n    public static final String UPDATE_PARKING_SPOT =\r\n            \"update parking set available = ? where PARKING_NUMBER = ?\";\r\n    /**\r\n     * SQL command save information ticket.\r\n     */\r\n    public static final String SAVE_TICKET =\r\n            \"insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER,\"\r\n                    + \" PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)\";\r\n    /**\r\n     * SQL command update price and Out-time ticket.\r\n     */\r\n    public static final String UPDATE_TICKET =\r\n            \"update ticket set PRICE=?, OUT_TIME=? where ID=?\";\r\n    /**\r\n     * SQL command get a ticket.\r\n     */\r\n    public static final String GET_TICKET =\r\n            \"select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, \"\r\n                    + \"p.TYPE from ticket t,parking p where p.parking_number = \"\r\n                    + \"t.parking_number and t.VEHICLE_REG_NUMBER=? \"\r\n                    + \"order by t.IN_TIME  limit 1\";\r\n    /**\r\n     * SQL command get vehicle number.\r\n     */\r\n    public static final String IS_RECURRENT_USER =\r\n            \"SELECT VEHICLE_REG_NUMBER FROM ticket\";\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/parkit/parkingsystem/constants/DBConstants.java b/src/main/java/com/parkit/parkingsystem/constants/DBConstants.java
+--- a/src/main/java/com/parkit/parkingsystem/constants/DBConstants.java	
++++ b/src/main/java/com/parkit/parkingsystem/constants/DBConstants.java	
+@@ -5,7 +5,7 @@
+     /**
+      * default constructor.
+      */
+-    public void constructor() { }
++    public DBConstants() { }
+ 
+     /**
+      * SQL command getting Next available parking Spot.
